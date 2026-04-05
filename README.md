@@ -1,4 +1,4 @@
-# 📐 Opciones · Superficie de Volatilidad Implícita
+# Opciones · Volatilidad Implícita
 
 > Análisis de la volatilidad implícita con modelos SVI, SABR y señales de reversión a la media AR(1).  
 > Datos completamente sintéticos.
