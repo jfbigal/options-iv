@@ -293,8 +293,7 @@ with tab_chain:
 
     cc1, cc2, cc3 = st.columns(3)
     exp_sel_c  = cc1.selectbox("Expiry", expiries, key="chain_exp",
-                                format_func=lambda x: pd.Timestamp(x).strftime("%d %b %Y  (%dd)").replace(
-                                    "(%dd)", f"({int((pd.Timestamp(x) - pd.Timestamp.now()).days)}d)"))
+                                format_func=lambda x: pd.Timestamp(x).strftime("%d %b %Y"))
     cp_sel_c   = cc2.selectbox("Side", ["Both", "C", "P"], key="chain_cp")
     show_cols  = cc3.multiselect(
         "Columns",
