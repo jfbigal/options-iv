@@ -576,7 +576,7 @@ with tab_ar1:
         if sub.empty:
             return pd.DataFrame()
 
-        sub["snapshot_ts"] = pd.to_datetime(sub["snapshot_ts"])
+        sub["snapshot_ts"] = pd.to_datetime(sub["snapshot_ts"]).dt.tz_localize(None)
 
         eps_rows = []
         for ts, grp in sub.groupby(pd.Grouper(key="snapshot_ts", freq="1min")):
@@ -586,9 +586,9 @@ with tab_ar1:
             if not (np.isfinite(S_v) and S_v > 0):
                 continue
 
-            exp_tz = exp_dt.tz_localize("UTC") if exp_dt.tzinfo is None else exp_dt
-            snap_tz = ts.tz_localize("UTC") if ts.tzinfo is None else ts
-            T_v = max((exp_tz - snap_tz).total_seconds() / (365 * 24 * 3600), 1e-4)
+            exp_naive = exp_dt.tz_localize(None) if exp_dt.tzinfo is not None else exp_dt
+            snap_naive = ts.tz_localize(None) if ts.tzinfo is not None else ts
+            T_v = max((exp_naive - snap_naive).total_seconds() / (365 * 24 * 3600), 1e-4)
             F_v = S_v * np.exp((float(r_in) - float(q_in)) * T_v)
 
             grp = grp.copy()
