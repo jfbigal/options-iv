@@ -640,16 +640,6 @@ with tab_ar1:
     with st.spinner("Building ε panel from synthetic history…"):
         eps_panel = _build_eps_panel(str(exp_sel_a), float(lmny_cut))
 
-    # DEBUG — borrá esto después
-    st.write("exp_sel_a:", exp_sel_a)
-    st.write("hist shape:", _load_history().shape)
-    hist_debug = _load_history()
-    st.write("hist expiries:", hist_debug["expiration"].unique())
-    st.write("hist snapshot_ts sample:", hist_debug["snapshot_ts"].head(3).tolist())
-    st.write("eps_panel empty?", eps_panel.empty)
-    if not eps_panel.empty:
-        st.write("eps_panel shape:", eps_panel.shape)
-
 
     if eps_panel.empty:
         st.warning("No data for this expiry in the historical panel.")
