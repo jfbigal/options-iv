@@ -465,8 +465,8 @@ with tab_smile:
     fig_smile.add_vline(x=atm_x, line_dash="dot", line_color="#444", line_width=1)
     fig_smile.update_layout(**PLOTLY_LAYOUT, height=460,
         xaxis_title=xcol, yaxis_title="Implied Volatility",
-        title="Vol Smile — Market vs Models",
-        yaxis=dict(tickformat=".0%", gridcolor="#1e1e22"))
+        title="Vol Smile — Market vs Models")
+    fig_smile.update_yaxes(tickformat=".0%")
     st.plotly_chart(fig_smile, use_container_width=True)
 
     # ── Figure 2: Residuals (IV − model) × vega ──────────────────────
@@ -542,8 +542,8 @@ with tab_smile:
             marker=dict(size=8, color=RED)))
         fig_ts.update_layout(**PLOTLY_LAYOUT, height=280,
             xaxis_title="Days to Expiry", yaxis_title="ATM IV",
-            yaxis=dict(tickformat=".0%", gridcolor="#1e1e22"),
             title="ATM IV Term Structure")
+        fig_ts.update_yaxes(tickformat=".0%")
         st.plotly_chart(fig_ts, use_container_width=True)
 
 
