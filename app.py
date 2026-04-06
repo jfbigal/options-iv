@@ -882,8 +882,8 @@ with tab_ar1:
     if not ar1_row.empty:
         eps_s = float(ar1_row["eps_std"].iloc[0])
         if np.isfinite(eps_s):
-            fig_ts_chart.add_hline(y= eps_s, line_dash="dot", line_color=f"{RED}88", row=2, col=1)
-            fig_ts_chart.add_hline(y=-eps_s, line_dash="dot", line_color=f"{GREEN}88", row=2, col=1)
+            fig_ts_chart.add_hline(y= eps_s, line_dash="dot", line_color="rgba(239,68,68,0.45)", row=2, col=1)
+            fig_ts_chart.add_hline(y=-eps_s, line_dash="dot", line_color="rgba(34,197,94,0.45)", row=2, col=1)
 
     # Panel 3: pct
     fig_ts_chart.add_trace(go.Scatter(
@@ -892,10 +892,8 @@ with tab_ar1:
         line=dict(color=PURPLE, width=2),
         fill="tozeroy", fillcolor="rgba(167,139,250,0.07)",
     ), row=3, col=1)
-    fig_ts_chart.add_hrect(y0=0, y1=pct_lo,
-        fillcolor=f"{GREEN}15", line_width=0, row=3, col=1)
-    fig_ts_chart.add_hrect(y0=pct_hi, y1=100,
-        fillcolor=f"{RED}15", line_width=0, row=3, col=1)
+    fig_ts_chart.add_hrect(y0=0, y1=pct_lo, fillcolor="rgba(34,197,94,0.08)", line_width=0, row=3, col=1)
+    fig_ts_chart.add_hrect(y0=pct_hi, y1=100, fillcolor="rgba(239,68,68,0.08)", line_width=0, row=3, col=1)
 
     fig_ts_chart.update_yaxes(title_text="IV", row=1, col=1, tickformat=".0%")
     fig_ts_chart.update_yaxes(title_text="ε",  row=2, col=1)
