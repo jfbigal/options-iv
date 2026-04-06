@@ -911,7 +911,16 @@ with tab_ar1:
         height=620,
         barmode="relative",
         showlegend=True,
-        legend=dict(orientation="h", y=1.03),
+    )
+
+    fig_ts_chart.update_layout(
+        legend=dict(
+            bgcolor="rgba(0,0,0,0)",
+            bordercolor="#333",
+            borderwidth=1,
+            orientation="h",
+            y=1.03,
+        )
     )
 
     fig_ts_chart.update_xaxes(**xaxis_cfg, row=1, col=1)
