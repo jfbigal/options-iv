@@ -257,6 +257,7 @@ expiries = sorted(df["expiration"].dropna().unique())
 # Header
 # ══════════════════════════════════════════════════════════════════
 st.markdown("## 📐 Options · IV Surface")
+st.caption("DEPLOY CHECK - commit a25e9fd")
 st.markdown(
     f'<span class="tag tag-blue">GGAL synthetic</span>'
     f'<span class="tag tag-gray">r = {r_in:.2%}</span>'
