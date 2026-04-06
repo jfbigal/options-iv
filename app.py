@@ -15,7 +15,7 @@ import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from scipy.stats import norm
-
+from io import StringIO
 from core.bs import bs_price, bs_vega, bs_delta, bs_gamma, bs_theta, implied_vol, prob_itm
 from core.models import (
     svi_iv, fit_svi,
@@ -659,8 +659,8 @@ with tab_ar1:
 
     # ── AR(1) stats per option ──────────────────────────────────────
     @st.cache_data(show_spinner=False, ttl=300)
-    def _ar1_stats(eps_json, roll_w):
-        eps = pd.read_json(eps_json, orient="split")
+    def _ar1_stats(eps_df, roll_w):
+        eps = eps_df.copy()
         eps["snapshot_ts"] = pd.to_datetime(eps["snapshot_ts"])
         rows = []
         for (sym, cp_), g in eps.groupby(["symbol", "cp"]):
@@ -690,7 +690,7 @@ with tab_ar1:
         return pd.DataFrame(rows)
 
     with st.spinner("Fitting AR(1) per option…"):
-        ar1_df = _ar1_stats(eps_panel.to_json(orient="split"), int(roll_win))
+        ar1_df = _ar1_stats(eps_panel, int(roll_win))
 
     if ar1_df.empty:
         st.warning("Not enough data for AR(1) estimation.")
