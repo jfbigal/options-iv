@@ -132,20 +132,25 @@ def generate_chain(
 def generate_history(
     n_days: int = N_DAYS,
     n_snapshots_per_day: int = N_SNAPSHOTS,
-    spot_drift: float = 0.0002,    # small upward drift per snapshot
-    spot_vol: float = 0.008,       # intraday vol per snapshot
-    iv_drift: float = -0.0002,     # slight IV mean-reversion drift
-    iv_vol: float = 0.010,         # IV noise per snapshot
+    spot_drift: float = 0.0002,
+    spot_vol: float = 0.008,
+    iv_drift: float = -0.0002,
+    iv_vol: float = 0.010,
 ) -> pd.DataFrame:
     """
     Generate N_DAYS × N_SNAPSHOTS of intraday option snapshots.
     Used for the AR(1) mean-reversion tab.
     """
-    base_time = datetime(2025, 3, 1, 10, 30, tzinfo=timezone.utc)
+    today = datetime.now(timezone.utc).replace(hour=10, minute=30, second=0, microsecond=0)
+    base_time = today - timedelta(days=n_days)
     all_dfs = []
 
     spot = SPOT
     atm_iv_state = {dte: p["atm_iv"] for dte, p in SABR_PARAMS.items()}
+
+    # VENCIMIENTOS FIJOS PARA TODO EL HISTÓRICO
+    ref_now = datetime.now(timezone.utc)
+    fixed_expiries = {dte: _make_expiry_ts(ref_now, dte) for dte in SABR_PARAMS.keys()}
 
     for day in range(n_days):
         day_offset = timedelta(days=day)
@@ -167,15 +172,16 @@ def generate_history(
                     0.20, 1.50
                 ))
 
-            # Build chain for this snapshot (noise reused per snapshot)
             for dte, p in SABR_PARAMS.items():
-                exp_ts = _make_expiry_ts(ts, dte)
+                exp_ts = fixed_expiries[dte]
                 T = max((exp_ts - ts).total_seconds() / (365 * 24 * 3600), 1e-4)
                 F = spot * np.exp((R - Q) * T)
 
-                p_now = dict(atm_iv=atm_iv_state[dte],
-                             skew=p["skew"] + RNG.normal(0, 0.005),
-                             smile=p["smile"] + RNG.normal(0, 0.003))
+                p_now = dict(
+                    atm_iv=atm_iv_state[dte],
+                    skew=p["skew"] + RNG.normal(0, 0.005),
+                    smile=p["smile"] + RNG.normal(0, 0.003),
+                )
 
                 for K in STRIKES_GRID:
                     for cp in ["C", "P"]:
@@ -194,7 +200,7 @@ def generate_history(
                         ask = theo + half
 
                         exp_label = exp_ts.strftime("%b%Y").lower()
-                        symbol    = f"GGAL{exp_label}{int(K)}{cp}"
+                        symbol = f"GGAL{exp_label}{int(K)}{cp}"
 
                         all_dfs.append({
                             "symbol":      symbol,
