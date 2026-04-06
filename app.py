@@ -912,8 +912,11 @@ with tab_ar1:
         barmode="relative",
         showlegend=True,
         legend=dict(orientation="h", y=1.03),
-        xaxis=xaxis_cfg, xaxis2=xaxis_cfg, xaxis3=xaxis_cfg,
     )
+
+    fig_ts_chart.update_xaxes(**xaxis_cfg, row=1, col=1)
+    fig_ts_chart.update_xaxes(**xaxis_cfg, row=2, col=1)
+    fig_ts_chart.update_xaxes(**xaxis_cfg, row=3, col=1)
     st.plotly_chart(fig_ts_chart, use_container_width=True)
 
     # Metrics for selected option
