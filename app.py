@@ -137,7 +137,6 @@ PLOTLY_LAYOUT = dict(
     xaxis=dict(gridcolor="#1e1e22", zeroline=False),
     yaxis=dict(gridcolor="#1e1e22", zeroline=False),
     margin=dict(l=50, r=20, t=40, b=40),
-    legend=dict(bgcolor="rgba(0,0,0,0)", bordercolor="#333", borderwidth=1),
 )
 
 CYAN   = "#00d4ff"
