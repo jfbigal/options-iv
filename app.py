@@ -571,10 +571,19 @@ with tab_ar1:
     @st.cache_data(show_spinner=False, ttl=600)
     def _build_eps_panel(exp_sel_str, lmny_cut_v, min_pts=5):
         hist = _load_history()
-        exp_dt = pd.to_datetime(exp_sel_str)
-        sub = hist[pd.to_datetime(hist["expiration"]) == exp_dt].copy()
+
+        # identificar el expiry_key seleccionado en la cadena actual
+        exp_row = df[pd.to_datetime(df["expiration"]) == pd.to_datetime(exp_sel_str)]
+        if exp_row.empty:
+            return pd.DataFrame()
+
+        exp_key = int(exp_row["expiry_key"].iloc[0])
+
+        sub = hist[hist["expiry_key"] == exp_key].copy()
         if sub.empty:
             return pd.DataFrame()
+
+        exp_dt = pd.to_datetime(exp_sel_str)
 
         sub["snapshot_ts"] = pd.to_datetime(sub["snapshot_ts"]).dt.tz_localize(None)
 
